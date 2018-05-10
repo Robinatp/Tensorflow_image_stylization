@@ -149,8 +149,8 @@ def read_image(image_file):
             image = tf.image.convert_image_dtype(image, tf.float32)
             image = tf.expand_dims(image, axis=0)
             image = sess.run(image)
-            height = image.shape[0]
-            width = image.shape[1]
+            height = image.shape[1]
+            width = image.shape[2]
     tf.logging.info('Image size: %dx%d' % (width, height))
     return image
 

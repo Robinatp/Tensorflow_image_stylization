@@ -49,7 +49,7 @@ DEFAULT_STYLE_WEIGHTS = ('{"vgg_16/conv1": 1e-4, "vgg_16/conv2": 1e-4,'
 
 flags = tf.app.flags
 flags.DEFINE_float('clip_gradient_norm', 0, 'Clip gradients to this norm')
-flags.DEFINE_float('learning_rate', 1e-3, 'Learning rate')
+flags.DEFINE_float('learning_rate', 1e-4, 'Learning rate')
 flags.DEFINE_integer('batch_size', 12, 'Batch size.')
 flags.DEFINE_integer('image_size', 256, 'Image size.')
 flags.DEFINE_integer('ps_tasks', 0,
@@ -63,7 +63,7 @@ flags.DEFINE_integer('save_interval_secs', 600,
 flags.DEFINE_integer('task', 0,
                      'Task ID. Used when training with multiple '
                      'workers to identify each worker.')
-flags.DEFINE_integer('train_steps', 40000, 'Number of training steps.')
+flags.DEFINE_integer('train_steps', 400000, 'Number of training steps.')
 flags.DEFINE_string('content_weights', DEFAULT_CONTENT_WEIGHTS,
                     'Content weights')
 flags.DEFINE_string('master', '',
@@ -129,6 +129,28 @@ def main(unused_argv=None):
       total_loss, loss_dict = learning.total_loss(
           inputs, stylized_inputs, style_gram_matrices, content_weights,
           style_weights)
+      '''
+      inputs: Tensor("batch_processing/Reshape_4:0", shape=(12, 256, 256, 3), dtype=float32) ,content image
+      stylized_inputs: Tensor("transformer/expand/conv3/conv/Sigmoid:0", shape=(12, ?, ?, 3), dtype=float32) ,pastiche image
+      style_gram_matrices    dict: {}    
+        'vgg_16/conv1' ()    Tensor: Tensor("style_image_processing/batch:2", shape=(12, 64, 64), dtype=float32)    
+        'vgg_16/conv2' ()    Tensor: Tensor("style_image_processing/batch:4", shape=(12, 128, 128), dtype=float32)    
+        'vgg_16/conv3' ()    Tensor: Tensor("style_image_processing/batch:6", shape=(12, 256, 256), dtype=float32)    
+        'vgg_16/conv4' ()    Tensor: Tensor("style_image_processing/batch:8", shape=(12, 512, 512), dtype=float32)    
+        'vgg_16/conv5' ()    Tensor: Tensor("style_image_processing/batch:10", shape=(12, 512, 512), dtype=float32)    
+        'vgg_16/pool1' ()    Tensor: Tensor("style_image_processing/batch:3", shape=(12, 64, 64), dtype=float32)    
+        'vgg_16/pool2' ()    Tensor: Tensor("style_image_processing/batch:5", shape=(12, 128, 128), dtype=float32)    
+        'vgg_16/pool3' ()    Tensor: Tensor("style_image_processing/batch:7", shape=(12, 256, 256), dtype=float32)    
+        'vgg_16/pool4' ()    Tensor: Tensor("style_image_processing/batch:9", shape=(12, 512, 512), dtype=float32)    
+        'vgg_16/pool5' ()    Tensor: Tensor("style_image_processing/batch:11", shape=(12, 512, 512), dtype=float32)
+      content_weights    dict: {}    
+        'vgg_16/conv3' ()    float: 1.0
+      style_weights    dict: {}    
+        'vgg_16/conv1' ()    Tensor: Tensor("mul:0", shape=(12,), dtype=float32)    
+        'vgg_16/conv2' ()    Tensor: Tensor("mul_2:0", shape=(12,), dtype=float32)    
+        'vgg_16/conv3' ()    Tensor: Tensor("mul_1:0", shape=(12,), dtype=float32)    
+        'vgg_16/conv4' ()    Tensor: Tensor("mul_3:0", shape=(12,), dtype=float32)       
+      '''
       for key, value in loss_dict.iteritems():
         tf.summary.scalar(key, value)
 
