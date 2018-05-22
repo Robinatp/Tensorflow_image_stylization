@@ -70,6 +70,7 @@ def main(_):
 
             # Generate and write image data to file.
             with tf.gfile.GFile(generated_file, 'wb') as f:
+                
                 plt.subplot(122)
                 plt.imshow(sess.run(generated))
                 plt.show()

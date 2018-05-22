@@ -122,12 +122,11 @@ def net(image, training):
     with tf.variable_scope('deconv3'):
         # deconv_test = relu(instance_norm(conv2d(deconv2, 32, 32, 2, 1)))
         deconv3 = tf.nn.tanh(instance_norm(conv2d(deconv2, 32, 3, 9, 1)))
-
-    y = (deconv3 + 1) * 127.5
-
-    # Remove border effect reducing padding.
-    height = tf.shape(y)[1]
-    width = tf.shape(y)[2]
-    y = tf.slice(y, [0, 10, 10, 0], tf.stack([-1, height - 20, width - 20, -1]))
+    with tf.variable_scope('postprocess'):
+        y = (deconv3 + 1) * 127.5
+        # Remove border effect reducing padding.
+        height = tf.shape(y)[1]
+        width = tf.shape(y)[2]
+        y = tf.slice(y, [0, 10, 10, 0], tf.stack([-1, height - 20, width - 20, -1]))
 
     return y

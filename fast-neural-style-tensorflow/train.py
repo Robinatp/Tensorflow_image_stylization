@@ -129,9 +129,9 @@ def main(FLAGS):
                         tf.logging.info('adding summary...')
                         summary_str = sess.run(summary)
                         writer.add_summary(summary_str, step)
-                        writer.flush()
+#                         writer.flush()
                     """checkpoint"""
-                    if step % 1000 == 0:
+                    if step % 500 == 0:
                         saver.save(sess, os.path.join(training_path, 'fast-style-model.ckpt'), global_step=step)
             except tf.errors.OutOfRangeError:
                 saver.save(sess, os.path.join(training_path, 'fast-style-model.ckpt-done'))

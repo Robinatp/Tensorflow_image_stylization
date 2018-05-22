@@ -11,7 +11,7 @@ import utils
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-m', '--model_file', help='the path to the model file')
+    parser.add_argument('-m', '--model_file', default= 'models/mosaic/fast-style-model.ckpt-35000',help='the path to the model file')
     parser.add_argument('-n', '--model_name', default='transfer', help='the name of the model')
     parser.add_argument('-d', dest='is_debug', action='store_true')
     parser.set_defaults(is_debug=False)
@@ -49,15 +49,15 @@ def main(args):
             saver.restore(sess, model_file)
 
             if args.is_debug:
-                content_file = '/Users/Lex/Desktop/t.jpg'
-                generated_file = '/Users/Lex/Desktop/xwz-stylized.jpg'
+                content_file = 'img/test1.jpg'
+                generated_file = 'img/xwz-stylized.jpg'
 
                 with open(generated_file, 'wb') as img:
                     image_bytes = tf.read_file(content_file)
                     input_array, decoded_image = sess.run([
                         tf.reshape(tf.image.decode_jpeg(image_bytes, channels=3), [-1]),
                         tf.image.decode_jpeg(image_bytes, channels=3)])
-
+                    print(input_array.shape)
                     start_time = time.time()
                     img.write(sess.run(tf.image.encode_jpeg(tf.cast(cropped_image, tf.uint8)), feed_dict={
                               image_data: input_array,
@@ -70,7 +70,7 @@ def main(args):
                 output_graph_def = tf.graph_util.convert_variables_to_constants(
                     sess, sess.graph_def, output_node_names=['output_image'])
 
-                with tf.gfile.FastGFile('/Users/Lex/Desktop/' + args.model_name + '.pb', mode='wb') as f:
+                with tf.gfile.FastGFile('models/' + args.model_name + '.pb', mode='wb') as f:
                     f.write(output_graph_def.SerializeToString())
 
                 # tf.train.write_graph(g.as_graph_def(), '/Users/Lex/Desktop',
