@@ -41,7 +41,7 @@ def DownloadCheckpointFiles(checkpoint_dir='checkpoints'):
 input_image = 'evaluation_images/guerrillero_heroico.jpg'
 
 # Select a demo ('varied' or 'monet')
-demo = 'varied'
+demo = 'mine'
 
 # DownloadCheckpointFiles()
 image = np.expand_dims(image_utils.load_np_image(
@@ -52,12 +52,16 @@ if demo == 'monet':
 elif demo == 'varied':
     checkpoint = 'checkpoints/multistyle-pastiche-generator-varied.ckpt'
     num_styles = 32  # Number of images in checkpoint file. Do not change.
+else:
+    checkpoint = 'tmp/image_stylization/run1/train/model.ckpt-49458'
+    num_styles = 7  # Number of images in checkpoint file. Do not change.
+    
     
 # Styles from checkpoint file to render. They are done in batch, so the more 
 # rendered, the longer it will take and the more memory will be used.
 # These can be modified as you like. Here we randomly select six styles.
 styles = range(num_styles)
-random.shuffle(styles)
+# random.shuffle(styles)
 which_styles = styles[0:6]
 num_rendered = len(which_styles)  
 print(styles,which_styles)

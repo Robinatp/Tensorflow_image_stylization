@@ -26,11 +26,18 @@ import os
 
 # internal imports
 import tensorflow as tf
+import sys
+import os
 
-from magenta.models.image_stylization import image_utils
-from magenta.models.image_stylization import learning
-from magenta.models.image_stylization import model
-from magenta.models.image_stylization import vgg
+# This is needed since the notebook is stored in the object_detection folder.
+TF_API="/home/ubuntu/eclipse-workspace/Github/magenta/magenta/models/image_stylization"
+sys.path.append(os.path.split(TF_API)[0])
+sys.path.append(TF_API)
+
+from image_stylization import image_utils
+from image_stylization import learning
+from image_stylization import model
+from image_stylization import vgg
 
 slim = tf.contrib.slim
 
@@ -67,10 +74,13 @@ flags.DEFINE_string('style_dataset_file', None, 'Style dataset file.')
 flags.DEFINE_string('style_weights', DEFAULT_STYLE_WEIGHTS, 'Style weights')
 flags.DEFINE_string('train_dir', None,
                     'Directory for checkpoints and summaries.')
+flags.DEFINE_integer('log_steps', 2,
+                     'Display logging information at every log_steps.')
 FLAGS = flags.FLAGS
 
 
 def main(unused_argv=None):
+  tf.logging.set_verbosity(tf.logging.INFO)
   with tf.Graph().as_default():
     # Force all input processing onto CPU in order to reserve the GPU for the
     # forward inference and back-propagation.
@@ -154,6 +164,7 @@ def main(unused_argv=None):
       slim.learning.train(
           train_op=train_op,
           logdir=os.path.expanduser(FLAGS.train_dir),
+          log_every_n_steps=FLAGS.log_steps,
           master=FLAGS.master,
           is_chief=FLAGS.task == 0,
           number_of_steps=FLAGS.train_steps,

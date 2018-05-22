@@ -30,7 +30,7 @@ def print_ops(pb_path,output_layer):
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
  
-  parser.add_argument("--pb_path", default='stylize_quantized.pb',help="name of pb_path")
-  parser.add_argument("--output_layer",default='SqueezeNet/Predictions/Reshape_1:0', help="name of output layer")
+  parser.add_argument("--pb_path", default='./tmp/image_stylization/mine_freeze_graph.pb',help="name of pb_path")
+  parser.add_argument("--output_layer",default='transformer/expand/conv3/conv/Sigmoid:0', help="name of output layer")
   args = parser.parse_args()
 print_ops(args.pb_path,args.output_layer)

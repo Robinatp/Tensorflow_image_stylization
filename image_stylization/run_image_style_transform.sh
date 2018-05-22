@@ -11,7 +11,7 @@ python image_stylization_transform.py \
 
 
 #varied
- python image_stylization_transform.py \
+python image_stylization_transform.py \
       --num_styles=32 \
       --checkpoint=checkpoints/multistyle-pastiche-generator-varied.ckpt \
       --input_image=evaluation_images/test2.jpg \
@@ -21,10 +21,18 @@ python image_stylization_transform.py \
       
  
  #mine train
- python image_stylization_transform.py \
+python image_stylization_transform.py \
       --num_styles=7 \
       --checkpoint=tmp/image_stylization/run1/train/ \
-      --input_image=evaluation_images/test2.jpg \
+      --input_image=evaluation_images/benjamin_harrison.jpg \
       --which_styles="[0,1,2,3,4,5,6]" \
+      --output_dir=./tmp/image_stylization/output \
+      --output_basename="mine_stylized"
+      
+python image_stylization_transform.py \
+      --num_styles=7 \
+      --checkpoint=tmp/image_stylization/run1/train/ \
+      --input_image=evaluation_images/benjamin_harrison.jpg \
+      --which_styles="{0:0.5,1:0.1,2:0.1,3:0.1,4:0.1,5:0.1}" \
       --output_dir=./tmp/image_stylization/output \
       --output_basename="mine_stylized"

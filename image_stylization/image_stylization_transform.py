@@ -26,7 +26,8 @@ import numpy as np
 import tensorflow as tf
 import sys
 import os
-
+from tensorflow.python.framework import graph_util
+from tensorflow.python.platform import gfile
 # This is needed since the notebook is stored in the object_detection folder.
 TF_API="/home/ubuntu/eclipse-workspace/Github/magenta/magenta/models/image_stylization"
 sys.path.append(os.path.split(TF_API)[0])
@@ -35,7 +36,7 @@ sys.path.append(TF_API)
 from image_stylization import image_utils
 from image_stylization import model
 from image_stylization import ops
-
+slim = tf.contrib.slim
 
 flags = tf.flags
 flags.DEFINE_integer('num_styles', 10,
@@ -100,6 +101,15 @@ def _multiple_images(input_image, which_styles, output_dir):
             'scale': True})
     _load_checkpoint(sess, FLAGS.checkpoint)
     
+    ops = sess.graph.get_operations()
+    for op in ops:
+        print(op.name)
+    
+    print("Parameters")
+    for v in slim.get_model_variables():
+        print('name = {}, shape = {}'.format(v.name, v.get_shape()))
+    
+    save_graph_to_file(sess,sess.graph_def ,"./tmp/image_stylization/mine_freeze_graph.pb") 
     writer =tf.summary.FileWriter("./tmp/logs/",graph = sess.graph)
     writer.close()
 
@@ -132,11 +142,20 @@ def _multiple_styles(input_image, which_styles, output_dir):
             'scale': True})
     _load_checkpoint(sess, FLAGS.checkpoint)
 
-    stylized_image = stylized_images.eval()
-    image_utils.save_np_image(
-        stylized_image,
-        os.path.join(output_dir, '%s_%s.png' % (
-            FLAGS.output_basename, _describe_style(which_styles))))
+    
+    generated_file = os.path.join(output_dir, '%s_%s.jpg' % (FLAGS.output_basename, _describe_style(which_styles)))
+    print(generated_file)
+    
+    with tf.gfile.GFile(generated_file, 'wb') as f:
+        stylized_images = tf.cast(stylized_images*255, tf.uint8)
+        stylized_images = tf.squeeze(stylized_images, axis=0)
+        stylized_encode = sess.run(tf.image.encode_jpeg(stylized_images))
+        f.write(stylized_encode)
+#     stylized_image = stylized_images.eval()
+#     image_utils.save_np_image(
+#         stylized_image,
+#         os.path.join(output_dir, '%s_%s.png' % (
+#             FLAGS.output_basename, _describe_style(which_styles))))
 
 
 def read_image(image_file):
@@ -153,6 +172,14 @@ def read_image(image_file):
             width = image.shape[2]
     tf.logging.info('Image size: %dx%d' % (width, height))
     return image
+
+
+def save_graph_to_file(sess, graph, graph_file_name):
+  output_graph_def = graph_util.convert_variables_to_constants(
+      sess, graph, ["transformer/expand/conv3/conv/Sigmoid"])
+  with gfile.FastGFile(graph_file_name, 'wb') as f:
+    f.write(output_graph_def.SerializeToString())
+  return
 
 def main(unused_argv=None):
   # Load image
