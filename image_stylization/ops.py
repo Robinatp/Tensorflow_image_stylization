@@ -302,3 +302,47 @@ def conditional_style_norm(inputs,
     return slim.utils.collect_named_outputs(outputs_collections,
                                             sc.original_name_scope, outputs)
 
+@slim.add_arg_scope
+def adaptive_instance_norm(content_features, style_features, alpha, epsilon=1e-5):
+    '''
+    Borrowed from https://github.com/jonrei/tf-AdaIN
+    Normalizes the `content_features` with scaling and offset from `style_features`.
+    See "5. Adaptive Instance Normalization" in https://arxiv.org/abs/1703.06868 for details.
+    '''
+    style_mean, style_variance = tf.nn.moments(style_features, [1,2], keep_dims=True)
+    content_mean, content_variance = tf.nn.moments(content_features, [1,2], keep_dims=True)
+    normalized_content_features = tf.nn.batch_normalization(content_features, content_mean,
+                                                            content_variance, style_mean, 
+                                                            tf.sqrt(style_variance), epsilon)
+    outputs = alpha * normalized_content_features + (1 - alpha) * content_features
+    return outputs
+
+
+def instance_norm(x):
+    epsilon = 1e-9
+    mean, var = tf.nn.moments(x, [1, 2], keep_dims=True)
+    outputs = tf.div(tf.subtract(x, mean), tf.sqrt(tf.add(var, epsilon)))
+    return outputs
+
+
+def batch_norm(x, size, training, decay=0.999):
+    beta = tf.Variable(tf.zeros([size]), name='beta')
+    scale = tf.Variable(tf.ones([size]), name='scale')
+    pop_mean = tf.Variable(tf.zeros([size]))
+    pop_var = tf.Variable(tf.ones([size]))
+    epsilon = 1e-3
+
+    batch_mean, batch_var = tf.nn.moments(x, [0, 1, 2])
+    train_mean = tf.assign(pop_mean, pop_mean * decay + batch_mean * (1 - decay))
+    train_var = tf.assign(pop_var, pop_var * decay + batch_var * (1 - decay))
+
+    def batch_statistics():
+        with tf.control_dependencies([train_mean, train_var]):
+            return tf.nn.batch_normalization(x, batch_mean, batch_var, beta, scale, epsilon, name='batch_norm')
+
+    def population_statistics():
+        return tf.nn.batch_normalization(x, pop_mean, pop_var, beta, scale, epsilon, name='batch_norm')
+    outputs = tf.cond(training, batch_statistics, population_statistics)
+
+    return outputs
+
