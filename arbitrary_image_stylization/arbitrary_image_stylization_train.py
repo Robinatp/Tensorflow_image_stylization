@@ -62,9 +62,9 @@ flags.DEFINE_boolean('center_crop', False,
 flags.DEFINE_integer('ps_tasks', 0,
                      'Number of parameter servers. If 0, parameters '
                      'are handled locally by the worker.')
-flags.DEFINE_integer('save_summaries_secs', 15,
+flags.DEFINE_integer('save_summaries_secs', 600,
                      'Frequency at which summaries are saved, in seconds.')
-flags.DEFINE_integer('save_interval_secs', 15,
+flags.DEFINE_integer('save_interval_secs', 600,
                      'Frequency at which the model is saved, in seconds.')
 flags.DEFINE_integer('task', 0, 'Task ID. Used when training with multiple '
                      'workers to identify each worker.')

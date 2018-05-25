@@ -1,5 +1,5 @@
 python arbitrary_image_stylization_with_weights.py \
-  --checkpoint=./tmp/train_dir/\
+  --checkpoint=./tmp/train_dir/ \
   --output_dir=./images/output/ \
   --style_images_paths=./images/style_images/*.jpg \
   --content_images_paths=./images/content_images/*.jpg \

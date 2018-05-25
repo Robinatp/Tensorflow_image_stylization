@@ -55,10 +55,20 @@ FLAGS = flags.FLAGS
 
 def _parse_style_files(style_files):
   """Parse the style_files command-line argument."""
-  style_files = tf.gfile.Glob(style_files)
-  if not style_files:
-    raise ValueError('No image files found in {}'.format(style_files))
-  return style_files
+  if tf.gfile.IsDirectory(style_files):
+      directories = tf.gfile.ListDirectory(style_files)
+      tf.logging.info(directories)
+      photo_filenames = []
+      for directory in directories:
+        directory = os.path.join(style_files, directory)
+        photo_filename = tf.gfile.Glob(directory+"/*.jpg")
+        photo_filenames.extend(photo_filename)
+      return photo_filenames
+  else:
+      style_files = tf.gfile.Glob(style_files)
+      if not style_files:
+         raise ValueError('No image files found in {}'.format(style_files))
+      return style_files
 
 
 def _float_feature(value):

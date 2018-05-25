@@ -100,6 +100,37 @@ def main(unused_argv=None):
         inception_end_point='Mixed_6e',
         style_prediction_bottleneck=100,
         adds_losses=False)
+    '''
+    bottleneck_feat    Tensor: Tensor("Conv/BiasAdd:0", shape=(1, 1, 1, 100), dtype=float32)
+    style_params    dict: {}
+    'transformer/expand/conv1/conv/StyleNorm/beta' ()    Tensor: Tensor("style_params/transformer/expand/conv1/conv/StyleNorm/SpatialSqueeze:0", shape=(1, 64), dtype=float32)    
+    'transformer/expand/conv1/conv/StyleNorm/gamma' ()    Tensor: Tensor("style_params/transformer/expand/conv1/conv/StyleNorm/SpatialSqueeze_1:0", shape=(1, 64), dtype=float32)    
+    'transformer/expand/conv2/conv/StyleNorm/beta' ()    Tensor: Tensor("style_params/transformer/expand/conv2/conv/StyleNorm/SpatialSqueeze:0", shape=(1, 32), dtype=float32)    
+    'transformer/expand/conv2/conv/StyleNorm/gamma' ()    Tensor: Tensor("style_params/transformer/expand/conv2/conv/StyleNorm/SpatialSqueeze_1:0", shape=(1, 32), dtype=float32)    
+    'transformer/expand/conv3/conv/StyleNorm/beta' ()    Tensor: Tensor("style_params/transformer/expand/conv3/conv/StyleNorm/SpatialSqueeze:0", shape=(1, 3), dtype=float32)    
+    'transformer/expand/conv3/conv/StyleNorm/gamma' ()    Tensor: Tensor("style_params/transformer/expand/conv3/conv/StyleNorm/SpatialSqueeze_1:0", shape=(1, 3), dtype=float32)    
+    'transformer/residual/residual1/conv1/StyleNorm/beta' ()    Tensor: Tensor("style_params/transformer/residual/residual1/conv1/StyleNorm/SpatialSqueeze:0", shape=(1, 128), dtype=float32)    
+    'transformer/residual/residual1/conv1/StyleNorm/gamma' ()    Tensor: Tensor("style_params/transformer/residual/residual1/conv1/StyleNorm/SpatialSqueeze_1:0", shape=(1, 128), dtype=float32)    
+    'transformer/residual/residual1/conv2/StyleNorm/beta' ()    Tensor: Tensor("style_params/transformer/residual/residual1/conv2/StyleNorm/SpatialSqueeze:0", shape=(1, 128), dtype=float32)    
+    'transformer/residual/residual1/conv2/StyleNorm/gamma' ()    Tensor: Tensor("style_params/transformer/residual/residual1/conv2/StyleNorm/SpatialSqueeze_1:0", shape=(1, 128), dtype=float32)    
+    'transformer/residual/residual2/conv1/StyleNorm/beta' ()    Tensor: Tensor("style_params/transformer/residual/residual2/conv1/StyleNorm/SpatialSqueeze:0", shape=(1, 128), dtype=float32)    
+    'transformer/residual/residual2/conv1/StyleNorm/gamma' ()    Tensor: Tensor("style_params/transformer/residual/residual2/conv1/StyleNorm/SpatialSqueeze_1:0", shape=(1, 128), dtype=float32)    
+    'transformer/residual/residual2/conv2/StyleNorm/beta' ()    Tensor: Tensor("style_params/transformer/residual/residual2/conv2/StyleNorm/SpatialSqueeze:0", shape=(1, 128), dtype=float32)    
+    'transformer/residual/residual2/conv2/StyleNorm/gamma' ()    Tensor: Tensor("style_params/transformer/residual/residual2/conv2/StyleNorm/SpatialSqueeze_1:0", shape=(1, 128), dtype=float32)    
+    'transformer/residual/residual3/conv1/StyleNorm/beta' ()    Tensor: Tensor("style_params/transformer/residual/residual3/conv1/StyleNorm/SpatialSqueeze:0", shape=(1, 128), dtype=float32)    
+    'transformer/residual/residual3/conv1/StyleNorm/gamma' ()    Tensor: Tensor("style_params/transformer/residual/residual3/conv1/StyleNorm/SpatialSqueeze_1:0", shape=(1, 128), dtype=float32)    
+    'transformer/residual/residual3/conv2/StyleNorm/beta' ()    Tensor: Tensor("style_params/transformer/residual/residual3/conv2/StyleNorm/SpatialSqueeze:0", shape=(1, 128), dtype=float32)    
+    'transformer/residual/residual3/conv2/StyleNorm/gamma' ()    Tensor: Tensor("style_params/transformer/residual/residual3/conv2/StyleNorm/SpatialSqueeze_1:0", shape=(1, 128), dtype=float32)    
+    'transformer/residual/residual4/conv1/StyleNorm/beta' ()    Tensor: Tensor("style_params/transformer/residual/residual4/conv1/StyleNorm/SpatialSqueeze:0", shape=(1, 128), dtype=float32)    
+    'transformer/residual/residual4/conv1/StyleNorm/gamma' ()    Tensor: Tensor("style_params/transformer/residual/residual4/conv1/StyleNorm/SpatialSqueeze_1:0", shape=(1, 128), dtype=float32)    
+    'transformer/residual/residual4/conv2/StyleNorm/beta' ()    Tensor: Tensor("style_params/transformer/residual/residual4/conv2/StyleNorm/SpatialSqueeze:0", shape=(1, 128), dtype=float32)    
+    'transformer/residual/residual4/conv2/StyleNorm/gamma' ()    Tensor: Tensor("style_params/transformer/residual/residual4/conv2/StyleNorm/SpatialSqueeze_1:0", shape=(1, 128), dtype=float32)    
+    'transformer/residual/residual5/conv1/StyleNorm/beta' ()    Tensor: Tensor("style_params/transformer/residual/residual5/conv1/StyleNorm/SpatialSqueeze:0", shape=(1, 128), dtype=float32)    
+    'transformer/residual/residual5/conv1/StyleNorm/gamma' ()    Tensor: Tensor("style_params/transformer/residual/residual5/conv1/StyleNorm/SpatialSqueeze_1:0", shape=(1, 128), dtype=float32)    
+    'transformer/residual/residual5/conv2/StyleNorm/beta' ()    Tensor: Tensor("style_params/transformer/residual/residual5/conv2/StyleNorm/SpatialSqueeze:0", shape=(1, 128), dtype=float32)    
+    'transformer/residual/residual5/conv2/StyleNorm/gamma' ()    Tensor: Tensor("style_params/transformer/residual/residual5/conv2/StyleNorm/SpatialSqueeze_1:0", shape=(1, 128), dtype=float32)    
+    __len__    int: 26    
+    '''
     
     file_writer = tf.summary.FileWriter("log/",sess.graph)
 
